@@ -9,9 +9,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -58,57 +61,28 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        final Button btn_map = (Button) findViewById(R.id.btn_set_display_time_map);
-        final Button btn_default = (Button) findViewById(R.id.btn_set_display_time_default);
-
-        final SeekBar sb_map = (SeekBar) findViewById(R.id.sb_display_map);
-        final SeekBar sb_default = (SeekBar) findViewById(R.id.sb_display_default);
-        sb_map.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                btn_map.setText(""+i);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {            }
-        });
-
-        sb_default.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                btn_default.setText(""+i);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {            }
-        });
-
-
-        btn_map.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int val = sb_map.getProgress() * 1000;
-                Helper.map_display_time = val;
-            }
-        });
-
-        btn_default.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int val = sb_default.getProgress() * 1000;
-                Helper.setScreenOffTimeout(getContentResolver(), val);
-            }
-        });
-
-
         Helper.default_display_time = Helper.getScreenOffTimeout(getContentResolver());
         Log.i("KR", "default SCREEN_OFF_TIMEOUT: " + Helper.default_display_time);
+
+        Spinner sp = (Spinner) findViewById(R.id.spinner);
+        String[] items = new String[]{""+Helper.default_display_time, "5","15","30", "45", "60", "90", "120", "160"};
+        ArrayAdapter adapter= new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, items);
+        sp.setAdapter(adapter);
+
+        sp.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    String str = adapterView.getItemAtPosition(i).toString();
+                    int val = Integer.parseInt(str) * 1000;
+                    Helper.setScreenOffTimeout(getContentResolver(), val);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
     @Override

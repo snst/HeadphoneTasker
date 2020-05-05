@@ -6,74 +6,44 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <LinearLayout
+    <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/btn_exit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Exit" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Show map time, max 30 sec" />
-
-        <LinearLayout
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <SeekBar
-                android:id="@+id/sb_display_map"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:max="45"
-                android:progress="15" />
+            android:layout_height="match_parent" >
 
             <Button
-                android:id="@+id/btn_set_display_time_map"
+                android:id="@+id/btn_exit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:text="set" />
+                android:text="Exit" />
+        </TableRow>
 
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/textView2"
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Default display time, max 120 sec" />
+            android:layout_height="match_parent" >
 
-        <LinearLayout
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Default display time" />
+        </TableRow>
+
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="match_parent" >
 
-            <SeekBar
-                android:id="@+id/sb_display_default"
-                style="@style/Widget.AppCompat.SeekBar"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
                 android:layout_weight="1"
-                android:indeterminate="false"
-                android:max="120"
-                android:progress="90" />
+                android:spinnerMode="dropdown" />
+        </TableRow>
 
-            <Button
-                android:id="@+id/btn_set_display_time_default"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:text="set" />
-        </LinearLayout>
-
-    </LinearLayout>
+    </TableLayout>
 
 </android.support.constraint.ConstraintLayout>

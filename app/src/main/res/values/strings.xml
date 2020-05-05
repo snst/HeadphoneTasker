@@ -1,4 +1,14 @@
 <resources>
     <string name="app_name">HeadphoneTasker</string>
     <string name="accessibility_service_description">HeadphoneTasker</string>
+    <string-array name="screen_timeout_array">
+        <item>5</item>
+        <item>15</item>
+        <item>30</item>
+        <item>45</item>
+        <item>60</item>
+        <item>90</item>
+        <item>120</item>
+        <item>180</item>
+    </string-array>
 </resources>

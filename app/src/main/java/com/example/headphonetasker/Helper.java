@@ -25,13 +25,13 @@ public class Helper {
     {
         return android.provider.Settings.System.getInt(cr, Settings.System.SCREEN_OFF_TIMEOUT, 120000);
     }
-
+/*
     public static void setScreenOffTimeoutToShowMap(ContentResolver cr) {
         setScreenOffTimeout(cr, map_display_time);
     }
-
+*/
     public static void setScreenOffTimeoutToTurnOffDisplay(ContentResolver cr) {
-        setScreenOffTimeout(cr, 100);
+        setScreenOffTimeout(cr, 50);
     }
 
     public static void setScreenOffTimeoutDefault(ContentResolver cr) {
@@ -51,7 +51,7 @@ public class Helper {
 
     public static void turnDisplayOn(Context context) {
         Log.i("KR", "turn_on_screen()");
-        Helper.setScreenOffTimeoutToShowMap(context.getContentResolver());
+        Helper.setScreenOffTimeoutDefault(context.getContentResolver());
         PowerManager powerManager = (PowerManager) context.getSystemService(context.POWER_SERVICE);
         PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK |
                 PowerManager.ACQUIRE_CAUSES_WAKEUP |
