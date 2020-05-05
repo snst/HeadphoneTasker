@@ -18,7 +18,12 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
+
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class BackgroundAudioService extends MediaBrowserServiceCompat {
@@ -56,13 +61,79 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat {
         sendBroadcast(i);
     }
 
+    public void triggerMax() {
+        String str = "KRZ_MAX";
+        Log.i("KR", "triggerZoom: " + str);
+        Intent i = new Intent(str);
+        sendBroadcast(i);
+    }
+
+    private void handleSecond(int btn) {
+        if (!Helper.isDisplayOn(context)) {
+            Helper.turnDisplayOn(context);
+        } else {
+            if (btn == BTN_ZOOM)
+                triggerZoom(false);
+            else
+                triggerMax();
+        }
+    }
+
+    final int BTN_ZOOM = 1;
+    ButtonState bt = new ButtonState() {
+
+
+        @Override
+        public void shortClick(int btn) {
+            Log.i("BB", "shortClick: " + btn);
+            if (!Helper.isDisplayOn(context)) {
+                Helper.turnDisplayOn(context);
+            } else {
+                if(btn == BTN_ZOOM)
+                    triggerZoom(true);
+                else
+                    Helper.turnDisplayOff(context);
+            }
+        }
+
+        @Override
+        public void doubleClick(int btn) {
+            Log.i("BB", "doubleClick: " + btn);
+            handleSecond(btn);
+        }
+
+        @Override
+        public void repeatClick(int btn) {
+            Log.i("BB", "doubleClick: " + btn);
+            handleSecond(btn);
+        }
+
+        @Override
+        public void longClick(int btn) {
+            Log.i("BB", "longClick: " + btn);
+        //    handleSecond(btn);
+        }
+
+    };
+
+
+
     public void initVol() {
-        myVolumeProvider = new VolumeProviderCompat(VolumeProviderCompat.VOLUME_CONTROL_RELATIVE, 10, 5) {
+        myVolumeProvider = new VolumeProviderCompat(VolumeProviderCompat.VOLUME_CONTROL_ABSOLUTE, 100, 50) {
+
             @Override
+            public void onSetVolumeTo(int direction) {
+
+            }
+                @Override
             public void onAdjustVolume(int direction) {
                 // <0 volume down
                 // >0 volume up
-                Log.i("KR", "onAdjustVolume: " + direction);
+                //Log.i("KR", "onAdjustVolume: " + direction);
+                bt.handle(direction);
+
+
+                /*
 
                 if (Helper.isDisplayOn(context)) {
                     if (direction == 1) {
@@ -73,6 +144,7 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat {
                 } else {
                     Helper.turnDisplayOn(context);
                 }
+                */
             }
         };
     }

@@ -2,7 +2,6 @@ package com.example.headphonetasker;
 
 import android.content.ComponentName;
 import android.os.RemoteException;
-import android.provider.Settings;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
@@ -12,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SeekBar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,35 +46,63 @@ public class MainActivity extends AppCompatActivity {
 
         mMediaBrowserCompat.connect();
 
-        Button btn = (Button) findViewById(R.id.button);
+        Button btn = (Button) findViewById(R.id.btn_exit);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 Helper.setScreenOffTimeoutDefault(getContentResolver());
                 MediaControllerCompat.getMediaController(MainActivity.this).getTransportControls().stop();
-                //stopService(service);
                 finishAffinity();
                 System.exit(0);
             }
         });
 
-        btn = (Button) findViewById(R.id.button_set_turn_off_time);
-        btn.setOnClickListener(new View.OnClickListener() {
+        final Button btn_map = (Button) findViewById(R.id.btn_set_display_time_map);
+        final Button btn_default = (Button) findViewById(R.id.btn_set_display_time_default);
+
+        final SeekBar sb_map = (SeekBar) findViewById(R.id.sb_display_map);
+        final SeekBar sb_default = (SeekBar) findViewById(R.id.sb_display_default);
+        sb_map.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                btn_map.setText(""+i);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {            }
+        });
+
+        sb_default.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                btn_default.setText(""+i);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {            }
+        });
+
+
+        btn_map.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                EditText edit = (EditText) findViewById(R.id.editText_turn_off_time);
-                Helper.map_display_time = Integer.parseInt(edit.getText().toString())*1000;
+                int val = sb_map.getProgress() * 1000;
+                Helper.map_display_time = val;
             }
         });
 
-        btn = (Button) findViewById(R.id.button_play);
-        btn.setOnClickListener(new View.OnClickListener() {
+        btn_default.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                MediaControllerCompat.getMediaController(MainActivity.this).getTransportControls().play();
+                int val = sb_default.getProgress() * 1000;
+                Helper.setScreenOffTimeout(getContentResolver(), val);
             }
         });
 

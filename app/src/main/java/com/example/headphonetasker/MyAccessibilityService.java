@@ -29,6 +29,8 @@ public class MyAccessibilityService extends AccessibilityService {
             zoomOut();
         } else if (action.equals("KRZ_IN")) {
             zoomIn();
+        } else if (action.equals("KRZ_MAX")) {
+            zoomMax();
         }
         }
     };
@@ -39,6 +41,7 @@ public class MyAccessibilityService extends AccessibilityService {
         IntentFilter filter = new IntentFilter();
         filter.addAction("KRZ_OUT");
         filter.addAction("KRZ_IN");
+        filter.addAction("KRZ_MAX");
         registerReceiver(receiver, filter);
     }
 
@@ -52,6 +55,12 @@ public class MyAccessibilityService extends AccessibilityService {
         clickBuilder.addStroke(clickStroke);
         GestureDescription gesture = clickBuilder.build();
         dispatchGesture(gesture, null, null);
+    }
+
+
+    public void zoomMax() {
+        Log.i("KRA", "zoomMax()");
+        createClick(946, 1370);
     }
 
     public void zoomIn() {

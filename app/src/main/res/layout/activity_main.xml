@@ -6,76 +6,74 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TableLayout
-        android:layout_width="403dp"
-        android:layout_height="641dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <TableRow
+        <Button
+            android:id="@+id/btn_exit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Exit" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Show map time, max 30 sec" />
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <SeekBar
+                android:id="@+id/sb_display_map"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:max="45"
+                android:progress="15" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/btn_set_display_time_map"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="280dp"
-                android:layout_marginTop="56dp"
-                android:text="Exit" />
-        </TableRow>
+                android:layout_weight="0"
+                android:text="set" />
 
-        <TableRow
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView2"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:text="Default display time, max 120 sec" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <SeekBar
+                android:id="@+id/sb_display_default"
+                style="@style/Widget.AppCompat.SeekBar"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:indeterminate="false"
+                android:max="120"
+                android:progress="90" />
 
             <Button
-                android:id="@+id/button_play"
+                android:id="@+id/btn_set_display_time_default"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="play" />
-        </TableRow>
+                android:layout_weight="0"
+                android:text="set" />
+        </LinearLayout>
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="19dp"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="180dp"
-                android:text="Turn off screen [sec]" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <EditText
-                android:id="@+id/editText_turn_off_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
-                android:ems="10"
-                android:inputType="number"
-                android:text="15" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <Button
-                android:id="@+id/button_set_turn_off_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="36dp"
-                android:text="Set" />
-        </TableRow>
-    </TableLayout>
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
