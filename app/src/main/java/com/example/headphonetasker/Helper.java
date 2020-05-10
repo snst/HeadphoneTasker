@@ -8,38 +8,29 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.Display;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 public class Helper {
-    static int default_display_time = 120000;
-    static int map_display_time = 15000;
+    static int default_screen_off_millis = 120000;
 
-    public static void setScreenOffTimeout(ContentResolver cr, int val)
+    public static void set_screen_off_timeout(ContentResolver cr, int val)
     {
         android.provider.Settings.System.putInt(cr, Settings.System.SCREEN_OFF_TIMEOUT, val);
-        Log.i("KRH", "Set SCREEN_OFF_TIMEOUT: " + val);
+        Log.i("KRH", "set_screen_off_timeout: " + val);
     }
 
-    public static int getScreenOffTimeout(ContentResolver cr)
+    public static int get_screen_off_timeout(ContentResolver cr)
     {
         return android.provider.Settings.System.getInt(cr, Settings.System.SCREEN_OFF_TIMEOUT, 120000);
     }
-/*
-    public static void setScreenOffTimeoutToShowMap(ContentResolver cr) {
-        setScreenOffTimeout(cr, map_display_time);
-    }
-*/
-    public static void setScreenOffTimeoutToTurnOffDisplay(ContentResolver cr) {
-        setScreenOffTimeout(cr, 50);
+
+    public static void turn_display_off(ContentResolver cr) {
+        set_screen_off_timeout(cr, 50);
     }
 
-    public static void setScreenOffTimeoutDefault(ContentResolver cr) {
-        setScreenOffTimeout(cr, default_display_time);
+    public static void set_default_screen_off_timeout(ContentResolver cr) {
+        set_screen_off_timeout(cr, default_screen_off_millis);
     }
 
-
-    public static boolean isDisplayOn(Context context) {
+    public static boolean is_screen_on(Context context) {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         for (Display display : dm.getDisplays()) {
             if (display.getState() != Display.STATE_OFF) {
@@ -49,9 +40,9 @@ public class Helper {
         return false;
     }
 
-    public static void turnDisplayOn(Context context) {
-        Log.i("KR", "turn_on_screen()");
-        Helper.setScreenOffTimeoutDefault(context.getContentResolver());
+    public static void turn_screen_on(Context context) {
+        Log.i("KR", "turn_screen_on()");
+        Helper.set_default_screen_off_timeout(context.getContentResolver());
         PowerManager powerManager = (PowerManager) context.getSystemService(context.POWER_SERVICE);
         PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK |
                 PowerManager.ACQUIRE_CAUSES_WAKEUP |
@@ -60,20 +51,4 @@ public class Helper {
         wakeLock.acquire();
         wakeLock.release();
     }
-
-    public static void turnDisplayOff(Context context) {
-        Log.i("KR", "turn_off_screen()");
-        Helper.setScreenOffTimeoutToTurnOffDisplay(context.getContentResolver());
-        final Context c = context;
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if(!isDisplayOn(c))
-                {
-                    Helper.setScreenOffTimeoutDefault(c.getContentResolver());
-                }
-            }
-        }, 5000);
-    }
-
 }

@@ -19,17 +19,14 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 
-import java.time.Duration;
-import java.time.Instant;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 public class BackgroundAudioService extends MediaBrowserServiceCompat {
 
     private MediaSessionCompat mMediaSessionCompat;
-    private VolumeProviderCompat myVolumeProvider = null;
+    private VolumeProviderCompat mVolumeProvider = null;
+    final int BTN_ZOOM = 1;
 
     Context context = this;
 
@@ -37,114 +34,93 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat {
 
         @Override
         public boolean onMediaButtonEvent(Intent mediaButtonEvent) {
-            KeyEvent event = (KeyEvent) mediaButtonEvent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
-            Log.i("KR", "onMediaButtonEvent: " + event.getKeyCode() + ", action:" + event.getAction() + ", flags: " + event.getFlags());
-            if (event.getKeyCode() == 79) {
+        KeyEvent event = (KeyEvent) mediaButtonEvent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
+        Log.i("audio", "onMediaButtonEvent: " + event.getKeyCode() + ", action:" + event.getAction() + ", flags: " + event.getFlags());
+        if (event.getKeyCode() == 79) {
 
-                if (event.getAction() == 0) {
+            if (event.getAction() == 0) {
 
-                    if (Helper.isDisplayOn(context))
-                        Helper.turnDisplayOff(context);
-                    else
-                        Helper.turnDisplayOn(context);
-                }
+                if (Helper.is_screen_on(context))
+                    Helper.turn_display_off(context.getContentResolver());
+                else
+                    Helper.turn_screen_on(context);
             }
-            return true;
+        }
+        return true;
         }
     };
 
 
-    public void triggerZoom(boolean zoom_in) {
+    public void trigger_zoom(boolean zoom_in) {
         String str = zoom_in ? "KRZ_IN" : "KRZ_OUT";
-        Log.i("KR", "triggerZoom: " + str);
+        Log.i("audio", "triggerZoom: " + str);
         Intent i = new Intent(str);
         sendBroadcast(i);
     }
 
-    public void triggerMax() {
+    public void trigger_max() {
         String str = "KRZ_MAX";
-        Log.i("KR", "triggerZoom: " + str);
+        Log.i("audio", "triggerZoom: " + str);
         Intent i = new Intent(str);
         sendBroadcast(i);
     }
 
-    private void handleSecond(int btn) {
-        if (!Helper.isDisplayOn(context)) {
-            Helper.turnDisplayOn(context);
+
+    private void handle_second(int btn) {
+        if (!Helper.is_screen_on(context)) {
+            Helper.turn_screen_on(context);
         } else {
             if (btn == BTN_ZOOM)
-                triggerZoom(false);
+                trigger_zoom(false);
             else
-                triggerMax();
+                trigger_max();
         }
     }
 
-    final int BTN_ZOOM = 1;
-    ButtonState bt = new ButtonState() {
-
+    ButtonState mButtonState = new ButtonState() {
 
         @Override
-        public void shortClick(int btn) {
-            Log.i("BB", "shortClick: " + btn);
-            if (!Helper.isDisplayOn(context)) {
-                Helper.turnDisplayOn(context);
+        public void short_click(int btn) {
+            Log.i("audio", "shortClick: " + btn);
+            if (!Helper.is_screen_on(context)) {
+                Helper.turn_screen_on(context);
             } else {
                 if(btn == BTN_ZOOM)
-                    triggerZoom(true);
+                    trigger_zoom(true);
                 else
-                    Helper.turnDisplayOff(context);
+                    Helper.turn_display_off(context.getContentResolver());
             }
         }
 
         @Override
-        public void doubleClick(int btn) {
-            Log.i("BB", "doubleClick: " + btn);
-            handleSecond(btn);
+        public void double_click(int btn) {
+            Log.i("audio", "doubleClick: " + btn);
+            handle_second(btn);
         }
 
         @Override
-        public void repeatClick(int btn) {
-            Log.i("BB", "doubleClick: " + btn);
-            handleSecond(btn);
+        public void repeat_click(int btn) {
+            Log.i("audio", "doubleClick: " + btn);
+            handle_second(btn);
         }
 
         @Override
-        public void longClick(int btn) {
-            Log.i("BB", "longClick: " + btn);
+        public void long_click(int btn) {
+            Log.i("audio", "longClick: " + btn);
         //    handleSecond(btn);
         }
-
     };
 
 
-
-    public void initVol() {
-        myVolumeProvider = new VolumeProviderCompat(VolumeProviderCompat.VOLUME_CONTROL_ABSOLUTE, 100, 50) {
+    public void init_volume_provider() {
+        mVolumeProvider = new VolumeProviderCompat(VolumeProviderCompat.VOLUME_CONTROL_ABSOLUTE, 100, 50) {
 
             @Override
             public void onSetVolumeTo(int direction) {
-
             }
                 @Override
             public void onAdjustVolume(int direction) {
-                // <0 volume down
-                // >0 volume up
-                //Log.i("KR", "onAdjustVolume: " + direction);
-                bt.handle(direction);
-
-
-                /*
-
-                if (Helper.isDisplayOn(context)) {
-                    if (direction == 1) {
-                        triggerZoom(true);
-                    } else if (direction == -1) {
-                        triggerZoom(false);
-                    }
-                } else {
-                    Helper.turnDisplayOn(context);
-                }
-                */
+                mButtonState.handle(direction);
             }
         };
     }
@@ -152,7 +128,7 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat {
     @Override
     public void onCreate() {
         super.onCreate();
-        initMediaSession();
+        init_media_session();
 
         mMediaSessionCompat.setPlaybackState(new PlaybackStateCompat.Builder()
                 .setState(PlaybackStateCompat.STATE_PLAYING, 0, 0)
@@ -168,7 +144,7 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat {
         NotificationManagerCompat.from(this).cancel(1);
     }
 
-    private void initMediaSession() {
+    private void init_media_session() {
         ComponentName mediaButtonReceiver = new ComponentName(getApplicationContext(), MediaButtonReceiver.class);
         mMediaSessionCompat = new MediaSessionCompat(getApplicationContext(), "Tag", mediaButtonReceiver, null);
 
@@ -179,8 +155,8 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat {
         mediaButtonIntent.setClass(this, MediaButtonReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, mediaButtonIntent, 0);
         mMediaSessionCompat.setMediaButtonReceiver(pendingIntent);
-        initVol();
-        mMediaSessionCompat.setPlaybackToRemote(myVolumeProvider);
+        init_volume_provider();
+        mMediaSessionCompat.setPlaybackToRemote(mVolumeProvider);
 
         setSessionToken(mMediaSessionCompat.getSessionToken());
     }

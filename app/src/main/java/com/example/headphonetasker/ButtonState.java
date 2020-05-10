@@ -21,20 +21,20 @@ public class ButtonState {
     int mRepeatCnt = 0;
     Timer mTimer = new Timer();
 
-    public void shortClick(int btn) {
+    public void short_click(int btn) {
         Log.i("BB", "shortClick: " + btn);
     }
-    public void doubleClick(int btn) {
+    public void double_click(int btn) {
         Log.i("BB", "doubleClick: " + btn);
     }
-    public void longClick(int btn) {
+    public void long_click(int btn) {
         Log.i("BB", "longClick: " + btn);
     }
-    public void repeatClick(int btn) {
+    public void repeat_click(int btn) {
         Log.i("BB", "repeatClick: " + btn);
     }
 
-    private void startTimer(int cnt)
+    private void start_timer(int cnt)
     {
         mTimerActive = true;
         mTimer.schedule(new MyTimer(cnt) {
@@ -45,7 +45,7 @@ public class ButtonState {
                 mTimerActive = false;
                 if (mClickCnt == 1 && mRepeatCnt == 0 && mLastBtn == 0) {
                     //Log.i("BB", "ShortClick");
-                    shortClick(id);
+                    short_click(id);
                 }
             }
         }, 400);
@@ -59,12 +59,12 @@ public class ButtonState {
             if (mClickCnt > 1) {
 //                Log.i("BB", "double: " + mClickCnt);
                 mClickCnt = mRepeatCnt = 0;
-                doubleClick(mLastBtn);
+                double_click(mLastBtn);
 
             } else if(mRepeatCnt > 0) {
 //                Log.i("BB", "long: " + mRepeatCnt);
                 mClickCnt = mRepeatCnt = 0;
-                longClick(mLastBtn);
+                long_click(mLastBtn);
             }
         }
         else if (mLastBtn == 0) {
@@ -74,7 +74,7 @@ public class ButtonState {
             // new press
             if (!mTimerActive) {
                 mClickCnt = 1;
-                startTimer(k);
+                start_timer(k);
             } else {
                 mClickCnt++;
             }
@@ -83,7 +83,7 @@ public class ButtonState {
             // repeat
             mRepeatCnt++;
             if(mRepeatCnt==1) {
-                repeatClick(k);
+                repeat_click(k);
             }
         }
 

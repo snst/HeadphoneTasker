@@ -1,22 +1,14 @@
 package com.example.headphonetasker;
 
 import android.accessibilityservice.AccessibilityService;
-import android.accessibilityservice.AccessibilityServiceInfo;
 import android.accessibilityservice.GestureDescription;
-import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Path;
-import android.graphics.Rect;
-import android.os.Handler;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
-import android.view.accessibility.AccessibilityNodeInfo;
-import android.widget.ImageButton;
-
-import java.util.List;
 
 public class MyAccessibilityService extends AccessibilityService {
 
@@ -24,13 +16,14 @@ public class MyAccessibilityService extends AccessibilityService {
         @Override
         public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
-        Log.i("KRA", action);
+        Log.i("acc", action);
+
         if (action.equals("KRZ_OUT")) {
-            zoomOut();
+            zoom_out();
         } else if (action.equals("KRZ_IN")) {
-            zoomIn();
+            zoom_in();
         } else if (action.equals("KRZ_MAX")) {
-            zoomMax();
+            zoom_max();
         }
         }
     };
@@ -45,7 +38,7 @@ public class MyAccessibilityService extends AccessibilityService {
         registerReceiver(receiver, filter);
     }
 
-    private void createClick(float x, float y) {
+    private void create_click(int x, int y) {
         int DURATION = 5;
         Path clickPath = new Path();
         clickPath.moveTo(x, y);
@@ -58,63 +51,24 @@ public class MyAccessibilityService extends AccessibilityService {
     }
 
 
-    public void zoomMax() {
-        Log.i("KRA", "zoomMax()");
-        createClick(946, 1370);
+    public void zoom_max() {
+        Log.i("acc", "zoom_max()");
+        create_click(946, 1370);
     }
 
-    public void zoomIn() {
-        Log.i("KRA", "zoomIn()");
-        createClick(946, 1520);
+    public void zoom_in() {
+        Log.i("acc", "zoom_in()");
+        create_click(946, 1520);
     }
 
-    public void zoomOut() {
-        Log.i("KRA", "zoomOut()");
-        createClick(946, 1670);
+    public void zoom_out() {
+        Log.i("acc", "zoom_out()");
+        create_click(946, 1670);
     }
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-        /*
-        AccessibilityNodeInfo nodeInfo = event.getSource();
-        Log.i("KRA", event.toString());
-            if (event.getEventType()==AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
-            Log.i("KRA", "TYPE_WINDOW_STATE_CHANGED: " + event.getPackageName().toString());
-            if(event.getPackageName().toString().endsWith("de.komoot.android"))
-            {
-                int k=0;
-                for(int i=0; i<nodeInfo.getChildCount(); i++) {
-
-                    AccessibilityNodeInfo node = nodeInfo.getChild(i);
-                    if (null != node) {
-                        //Log.i("KRA-item: ", node.getClassName().toString());
-                        if(node.getClassName().equals("android.widget.ImageButton"))
-                        {
-                        }
-                    }
-                }
-            } else {
-                nodeInfoZoomIn = nodeInfoZoomOut = null;
-            }
-        }
-        nodeInfo.recycle();
-            */
     }
-
-    /*
-    @Override
-    public void onServiceConnected(){
-        Log.e("KRA", " onServiceConnected");
-
-        AccessibilityServiceInfo info = new AccessibilityServiceInfo();
-        info.eventTypes = AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED;
-        info.eventTypes = AccessibilityEvent.TYPES_ALL_MASK;
-        info.feedbackType = AccessibilityServiceInfo.FEEDBACK_ALL_MASK;
-        info.notificationTimeout = 100;
-        info.packageNames = null;
-        setServiceInfo(info);
-    }*/
-
 
     @Override
     public void onInterrupt() {
