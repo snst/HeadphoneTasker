@@ -2,6 +2,7 @@ package com.example.headphonetasker;
 
 import android.app.PendingIntent;
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
@@ -18,6 +19,7 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.WindowManager;
 
 import java.util.List;
 
@@ -38,13 +40,13 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat {
         Log.i("audio", "onMediaButtonEvent: " + event.getKeyCode() + ", action:" + event.getAction() + ", flags: " + event.getFlags());
         if (event.getKeyCode() == 79) {
 
-            if (event.getAction() == 0) {
+            /*if (event.getAction() == 0) {
 
                 if (Helper.is_screen_on(context))
                     Helper.turn_display_off(context.getContentResolver());
                 else
                     Helper.turn_screen_on(context);
-            }
+            }*/
         }
         return true;
         }
@@ -82,31 +84,41 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat {
         @Override
         public void short_click(int btn) {
             Log.i("audio", "shortClick: " + btn);
+            MainActivity.instance.set_status("shortClick: " + btn);
+
             if (!Helper.is_screen_on(context)) {
+                MainActivity.instance.komootToFront();
                 Helper.turn_screen_on(context);
+                //Helper.set_screen_brightness(context, 255);
             } else {
                 if(btn == BTN_ZOOM)
                     trigger_zoom(true);
-                else
-                    Helper.turn_display_off(context.getContentResolver());
+                else {
+                    Helper.turn_display_off(context);
+                    MainActivity.instance.taskerToFront();
+                    Helper.set_screen_brightness(context, 0);
+                }
             }
         }
 
         @Override
         public void double_click(int btn) {
             Log.i("audio", "doubleClick: " + btn);
+            MainActivity.instance.set_status("doubleClick: " + btn);
             handle_second(btn);
         }
 
         @Override
         public void repeat_click(int btn) {
-            Log.i("audio", "doubleClick: " + btn);
+            Log.i("audio", "repeatClick: " + btn);
+            MainActivity.instance.set_status("repeatClick: " + btn);
             handle_second(btn);
         }
 
         @Override
         public void long_click(int btn) {
             Log.i("audio", "longClick: " + btn);
+            MainActivity.instance.set_status("longClick: " + btn);
         //    handleSecond(btn);
         }
     };

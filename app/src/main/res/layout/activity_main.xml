@@ -4,46 +4,62 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#000000"
     tools:context=".MainActivity">
 
-    <TableLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <TableRow
+        <Button
+            android:id="@+id/btn_exit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#5E5E5E"
+            android:text="Exit" />
+
+        <TextView
+            android:id="@+id/textView2"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="wrap_content"
+            android:text="Default display time"
+            android:textColor="@android:color/white" />
 
-            <Button
-                android:id="@+id/btn_exit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Exit" />
-        </TableRow>
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:background="#5E5E5E"
+            android:spinnerMode="dialog" />
 
-        <TableRow
+        <TextView
+            android:id="@+id/tvStatus"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="40dp"
+            android:textColor="@android:color/darker_gray" />
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Default display time" />
-        </TableRow>
-
-        <TableRow
+        <Button
+            android:id="@+id/btn_komoot"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="80dp"
+            android:background="#5E5E5E"
+            android:text="Komoot" />
 
-            <Spinner
-                android:id="@+id/spinner"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:spinnerMode="dropdown" />
-        </TableRow>
+        <SeekBar
+            android:id="@+id/sb_brightness"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:max="255" />
 
-    </TableLayout>
+        <CheckBox
+            android:id="@+id/cb_brightness"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Auto brightness"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
