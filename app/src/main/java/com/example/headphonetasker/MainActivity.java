@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     public static MainActivity instance;
     private int screen_brightness;
     private int screen_brightness_mode;
+    public int last_app = 0;
 
 
     private MediaBrowserCompat.ConnectionCallback mMediaBrowserCompatConnectionCallback = new MediaBrowserCompat.ConnectionCallback() {
@@ -57,8 +58,56 @@ public class MainActivity extends AppCompatActivity {
 
         PackageManager pm = this.getPackageManager();
         Intent intent = pm.getLaunchIntentForPackage("de.komoot.android");
+        last_app = 0;
         if (intent != null) {
             this.startActivity(intent);
+        }
+    }
+
+    public void OsmAndToFront() {
+
+        PackageManager pm = this.getPackageManager();
+        Intent intent = pm.getLaunchIntentForPackage("net.osmand.plus");
+        last_app = 1;
+        if (intent != null) {
+            this.startActivity(intent);
+        }
+    }
+
+    public int[] get_zoom_in_coord() {
+        final int [] komoot={943,1350};
+        final int [] osmand={980,1630};
+        switch(last_app) {
+            case 1:
+                return osmand;
+            case 0:
+            default:
+                return komoot;
+        }
+    }
+
+    public int[] get_zoom_out_coord() {
+        final int [] komoot={943,1471};
+        final int [] osmand={980,1823};
+        switch(last_app) {
+            case 1:
+                return osmand;
+            case 0:
+            default:
+                return komoot;
+        }
+    }
+
+    public void lastAppToFront()
+    {
+        switch(last_app) {
+            case 1:
+                OsmAndToFront();
+                break;
+            case 0:
+            default:
+                komootToFront();
+                break;
         }
     }
 
@@ -114,6 +163,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 komootToFront();
+                reset_screen_seetings();
+            }
+        });
+
+        btn = (Button) findViewById(R.id.btn_OsmAnd);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                OsmAndToFront();
                 reset_screen_seetings();
             }
         });
@@ -220,7 +279,7 @@ public class MainActivity extends AppCompatActivity {
 
             if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
                 reset_screen_seetings();
-                komootToFront();
+                lastAppToFront();
             } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
             }
         }

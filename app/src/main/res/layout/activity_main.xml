@@ -46,6 +46,13 @@
             android:background="#5E5E5E"
             android:text="Komoot" />
 
+        <Button
+            android:id="@+id/btn_OsmAnd"
+            android:layout_width="match_parent"
+            android:layout_height="91dp"
+            android:background="#5E5E5E"
+            android:text="OsmAnd" />
+
         <SeekBar
             android:id="@+id/sb_brightness"
             android:layout_width="match_parent"

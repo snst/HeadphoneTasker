@@ -87,7 +87,7 @@ public class BackgroundAudioService extends MediaBrowserServiceCompat {
             MainActivity.instance.set_status("shortClick: " + btn);
 
             if (!Helper.is_screen_on(context)) {
-                MainActivity.instance.komootToFront();
+                MainActivity.instance.lastAppToFront();
                 Helper.turn_screen_on(context);
                 //Helper.set_screen_brightness(context, 255);
             } else {
